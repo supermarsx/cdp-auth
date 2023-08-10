@@ -59,13 +59,13 @@ Form Field Name: `field_name`: Form authentication using username and password i
 
 Form Field ID (typed): `field_id_typing`: Form authentication using username and password input IDs but values are "typed" in (Alternative when `field_id` doesn't work)
 - format: `field_id_typing,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID`
-- example: `field_id,administrator,usernameField,passwordField`
+- example: `field_id_typing,administrator,usernameField,passwordField`
 
 --
 
 Form Field ID on Iframe: `field_id+iframe`: Form authentication using username and password input IDs when they're inside an iframe ID
-- format: `field_id,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID,IFRAMEID`
-- example: `field_id,administrator,usernameField,passwordField,loginFrame`
+- format: `field_id+iframe,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID,IFRAMEID`
+- example: `field_id+iframe,administrator,usernameField,passwordField,loginFrame`
 
 
 You'll need to check the specific form you want to login using Inspect and see what type of form it is and whats the most adequate solution.
