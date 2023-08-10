@@ -38,27 +38,27 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 Your "User Field" will look differently depending on the type of login form:
 
 
-`basic_auth`: Basic authentication the uses a small box on top of the browser, common in some routers and switches
+Basic Authentication: `basic_auth`: Basic authentication the uses a small box on top of the browser, common in some routers and switches
 - format: `basic_auth,USERNAME`
 - example: `basic_auth,admin`
 
 
-`field_id`: Form authentication using username and password input IDs
+Form Field ID: `field_id`: Form authentication using username and password input IDs
 - format: `field_id,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID`
 - example: `field_id,administrator,usernameField,passwordField`
 
 
-`field_name`: Form authentication using username and password input names
+Form Field Name: `field_name`: Form authentication using username and password input names
 - format: `field_name,USERNAME,USERNAMEFIELDNAME,PASSWORDFIELDNAME`
 - example: `field_name,administrator,user,pass`
 
 
-`field_id_typing`: Form authentication using username and password input IDs but values are "typed" in (Alternative when `field_id` doesn't work)
+Form Field ID (typed): `field_id_typing`: Form authentication using username and password input IDs but values are "typed" in (Alternative when `field_id` doesn't work)
 - format: `field_id_typing,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID`
 - example: `field_id,administrator,usernameField,passwordField`
 
 
-`field_id+iframe`: Form authentication using username and password input IDs when they're inside an iframe ID
+Form Field ID on Iframe: `field_id+iframe`: Form authentication using username and password input IDs when they're inside an iframe ID
 - format: `field_id,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID,IFRAMEID`
 - example: `field_id,administrator,usernameField,passwordField,loginFrame`
 
