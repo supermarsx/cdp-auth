@@ -9,6 +9,7 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 - Doesn't handle usernames or with commas
 - Sometimes startup is slow
 - Sometimes `field_id` mode bugs out and can't login
+- Passes clear password on a shell execute instruction to `cdp-auth`
 
 ## Quick start
 
@@ -24,13 +25,13 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 5. Configure `cdp-auth` as an external tool and pass the following arguments: `%PORT% %HOSTNAME% %USERFIELD% %PASSWORD%`
 6. Optionally configure `cdp-auth-passthrough` so console window stays hidden on execute (Recommended)
 7. Configure connections like
-    - Hostname/IP: Full url with protocol and port like: https://examplemgmt.com:9000
-    - Port: Remote debug port (has to be unqiue to each connection, minor thing i couldn't see a workaround)   
-    - Password: User password as normal   
-    - Protocol: External Tool   
-    - External Tool: (whatever you set as your cef client)   
-    - External Tool Before: (whatever you set as your cdp-auth)   
-    - User field: Depending on the type of authentication this field will look differently (refer to types of authentication)
+    - **Hostname/IP**: Full url with protocol and port like: https://examplemgmt.com:9000
+    - **Port**: Remote debug port (has to be unqiue to each connection, minor thing i couldn't see a workaround)   
+    - **Password**: User password as normal   
+    - **Protocol**: External Tool   
+    - **External Tool**: (whatever you set as your cef client)   
+    - **External Tool Before**: (whatever you set as your cdp-auth)   
+    - **User field**: Depending on the type of authentication this field will look differently (refer to types of authentication)
    
 9. Enjoy
     
