@@ -13,7 +13,7 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 ## Quick start
 
 1. Download the latest `cdp-auth` release
-2. Download cef client binary (if you don't have it yet) you can get this one from the official source or my mirror (https://github.com/supermarsx/mirror-cef_binary_155.3.13)[github]
+2. Download cef client binary (if you don't have it yet) you can get this one from the official source or my mirror (Github)[https://github.com/supermarsx/mirror-cef_binary_155.3.13]
 3. Extract `cdp-auth`to a folder and cef client to another
 4. Configure cef client as an external tool 
     cef client should be passed the following arguments: 
