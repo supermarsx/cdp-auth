@@ -1,0 +1,32 @@
+{
+  "name": "cdp-auth",
+  "version": "0.0.1",
+  "description": "CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG",
+  "main": "executable.js",
+  "scripts": {
+    "start": "node ./dist/executable.js",
+    "tsbuild": "tsc --build --clean && tsc --build",
+    "esbuild": "esbuild ./source/executable.ts --bundle --platform=node --outfile=./sea/executable.js",
+    "sea-build": "node ./dist/builder.js",
+    "sea-build-full": "npm run tsbuild && npm run esbuild && npm run sea-build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "scriptsComments": {
+    "start": "Run cdp-auth with arguments (recommended for debugging)",
+    "tsbuild":  "Clean build typescript to javascript",
+    "esbuild": "Create a commonjs version of the app to be built into a SEA",
+    "sea-build": "Executes the builder script",
+    "sea-build-full": "Run all necessary build steps"
+  },
+  "author": "supermarsx",
+  "license": "MIT",
+  "dependencies": {
+    "chrome-remote-interface": "^0.33.0",
+    "typescript": "^5.1.6"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.4.9",
+    "esbuild": "^0.19.0"
+  }
+}
