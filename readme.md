@@ -24,36 +24,59 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 5. Configure `cdp-auth` as an external tool and pass the following arguments: `%PORT% %HOSTNAME% %USERFIELD% %PASSWORD%`
 6. Optionally configure `cdp-auth-passthrough` so console window stays hidden on execute (Recommended)
 7. Configure connections like
+
     Hostname/IP: Full url with protocol and port like: https://examplemgmt.com:9000
+   
     Port: Remote debug port (has to be unqiue to each connection, minor thing i couldn't see a workaround)
+   
     Password: User password as normal
+   
     Protocol: External Tool
+   
     External Tool: (whatever you set as your cef client)
+   
     External Tool Before: (whatever you set as your cdp-auth)
+   
     User field: Depending on the type of authentication this field will look differently (refer to types of authentication)
-8. Enjoy
+   
+9. Enjoy
     
 ### Types of authentication
 Your "User Field" will look differently depending on the type of login form:
 
+
 `basic_auth`: Basic authentication the uses a small box on top of the browser, common in some routers and switches
+
 format: `basic_auth,USERNAME`
+
 example: `basic_auth,admin`
 
+
 `field_id`: Form authentication using username and password input IDs
+
 format: `field_id,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID`
+
 example: `field_id,administrator,usernameField,passwordField`
+
 
 `field_name`: Form authentication using username and password input names
+
 format: `field_name,USERNAME,USERNAMEFIELDNAME,PASSWORDFIELDNAME`
+
 example: `field_name,administrator,user,pass`
 
+
 `field_id_typing`: Form authentication using username and password input IDs but values are "typed" in (Alternative when `field_id` doesn't work)
+
 format: `field_id_typing,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID`
+
 example: `field_id,administrator,usernameField,passwordField`
 
+
 `field_id+iframe`: Form authentication using username and password input IDs when they're inside an iframe ID
+
 format: `field_id,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID,IFRAMEID`
+
 example: `field_id,administrator,usernameField,passwordField,loginFrame`
 
 
