@@ -6,7 +6,7 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 - Remote debug port has to be set manually, might be solved through some sort of passthrough app in between cef and mremoteng
 - Doesn't handle element ids or names with commas
 - Doesn't handle iframe ids with commas
-- Doesn't handle usernames or with commas
+- Doesn't handle usernames or passwords with commas
 - Sometimes startup is slow
 - Sometimes `field_id` mode bugs out and can't login
 - Passes clear password on a shell execute instruction to `cdp-auth`
