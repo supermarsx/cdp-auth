@@ -19,6 +19,21 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 - Handling commas, Wrap parameters in quotes or something maybe
 - Passing clear passwords on shell execute, encrypt them with AES and store a key internally somewhere maybe or temp file?
 
+## Known working logins
+
+- Any basic auth interfaces, routers, switches, etc.
+- pfSense (using field_id like `field_id,ADMINUSER,usernamefld,passwordfld`)
+- HP Integrated Lights Out or ILO (using field_id+iframe like `field_id+iframe,ADMINUSER,usernameInput,passwordInput,appFrame`)
+- Joomla (using field_id like `field_id,ADMINUSER,mod-login-username,mod-login-password`)
+- Portainer (using field_id_typing like `field_id_typing,ADMINUSER,username,password`)
+- Nginx Manager (using field_name like `field_name,ADMINUSER,identity,secret`)
+
+## Known not working logins
+
+- SQLPad, (using field_name like `field_name,ADMINUSER,email,password`), fills fields but gives invalid user/password
+
+Note: Please report any working/non-working login with its full method to be integrated in the list. Do it by opening an issue or something.
+
 ## Quick start
 
 1. Download the latest `cdp-auth` [release](https://github.com/supermarsx/cdp-auth/releases)
