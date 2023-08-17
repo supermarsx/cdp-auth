@@ -10,6 +10,14 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 - Sometimes startup is slow
 - Sometimes `field_id` mode bugs out and can't login
 - Passes clear password on a shell execute instruction to `cdp-auth`
+- Can open a single instance of each login due to debug port
+- Sometimes enter key on typed forms causes cdp error after login, workaround just by pressing the "back" button
+
+## Possible bug fixes
+
+- Manual debug port/single instance, Create a passthrough for cef client and cdp-auth that randomizes port
+- Handling commas, Wrap parameters in quotes or something maybe
+- Passing clear passwords on shell execute, encrypt them with AES and store a key internally somewhere maybe or temp file?
 
 ## Quick start
 
