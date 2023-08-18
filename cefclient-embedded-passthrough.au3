@@ -99,7 +99,7 @@ For $i = 1 To $iCdpTotalArgs ; Loop through args
     $sCdpArgs &= $CmdLine[$i] & " " ; Concatenate args to store
 Next
 Local $sCdpExecutablePath = StringFormat("%s%s", @ScriptDir,  $sCdpAuthBinary)
-Local $oCdpPid = ShellExecute($sCdpExecutablePath, $sCdpArgs, @ScriptDir, "", @SW_SHOW) ; Execute binary hidden
+Local $oCdpPid = ShellExecute($sCdpExecutablePath, $sCdpArgs, @ScriptDir, "", @SW_HIDE) ; Execute binary hidden
 
 Local $iAutoResizerTimeout = 2000
 AdlibRegister("_ResizeEmbeddedWindow", 50) ; Enabling initial embedded windows auto resize
