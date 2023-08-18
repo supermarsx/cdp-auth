@@ -1,3 +1,4 @@
+#NoTrayIcon
 Local $passthroughBinary = "\cdp-auth.exe" ; CDP binary
 Local $numArgs = $CmdLine[0] ; Get total amount of args
 Local $allArgs = "" ; Create arg store
