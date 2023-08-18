@@ -3,7 +3,6 @@
 A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG. Allows you to auto fill forms and login to some types of login forms automagically and using Chrome inside in mRemoteNG.
 
 ## Known bugs/limitations
-- Remote debug port has to be set manually, might be solved through some sort of passthrough app in between cef and mremoteng
 - Doesn't handle element ids or names with commas
 - Doesn't handle iframe ids with commas
 - Doesn't handle usernames or passwords with commas
@@ -14,8 +13,6 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 - Sometimes enter key on typed forms causes cdp error after login, workaround just by pressing the "back" button
 
 ## Possible bug fixes
-
-- Manual debug port/single instance, Create a passthrough for cef client and cdp-auth that randomizes port
 - Handling commas, Wrap parameters in quotes or something maybe
 - Passing clear passwords on shell execute, encrypt them with AES and store a key internally somewhere maybe or temp file?
 
@@ -36,7 +33,26 @@ Note: Please report any working/non-working login with its full method to be int
 
 ## Quick start
 
-1. Download the latest `cdp-auth` [release](https://github.com/supermarsx/cdp-auth/releases)
+### New `cefclient-embedded-passthrough`
+1. Download the latest `cdp-auth` [release](https://github.com/supermarsx/cdp-auth/releases) (0.0.2)
+2. Download cef client binary (if you don't have it yet) you can get this one from the [official source](https://github.com/chromiumembedded/cef), [spotifycdn mirror](https://github.com/chromiumembedded/cef) [my github mirror](https://github.com/supermarsx/mirror-cef_binary_155.3.13)
+3. Extract `cdp-auth`to cef client folder
+4. Configure `cefclient-embedded-passthrough` as an external tool 
+    `cefclient-embedded-passthrough` should be passed the following arguments: 
+    `%HOSTNAME% %USERFIELD% %PASSWORD%`
+    pick "try to integrate" (Very important if you want it to be embedded on a tab inside mremoteng)    
+5. Configure connections like
+    - **Hostname/IP**: Full url with protocol and port like: https://examplemgmt.com:9000
+    - **Password**: User password as normal   
+    - **Protocol**: External Tool   
+    - **External Tool**: (whatever you set as your cefclient-embedded-passthrough)  
+    - **User field**: Depending on the type of authentication this field will look differently (refer to types of authentication below)   
+6. Check if your cefclient folder contains `cefclient-embedded-passthrough`and `cdp-auth` beside `cefclient`.
+7. Enjoy
+
+### Old `cdp-auth-passthrough`
+
+1. Download the latest `cdp-auth` [release](https://github.com/supermarsx/cdp-auth/releases) (0.0.1)
 2. Download cef client binary (if you don't have it yet) you can get this one from the [official source](https://github.com/chromiumembedded/cef), [spotifycdn mirror](https://github.com/chromiumembedded/cef) [my github mirror](https://github.com/supermarsx/mirror-cef_binary_155.3.13)
 3. Extract `cdp-auth`to a folder and cef client to another
 4. Configure cef client as an external tool 
@@ -49,13 +65,13 @@ Note: Please report any working/non-working login with its full method to be int
 6. Optionally configure `cdp-auth-passthrough` so console window stays hidden on execute (Recommended)
 7. Configure connections like
     - **Hostname/IP**: Full url with protocol and port like: https://examplemgmt.com:9000
-    - **Port**: Remote debug port (has to be unqiue to each connection, minor thing i couldn't see a workaround)   
+    - **Port**: Remote debug port (has to be unique to each connection)   
     - **Password**: User password as normal   
     - **Protocol**: External Tool   
     - **External Tool**: (whatever you set as your cef client)   
     - **External Tool Before**: (whatever you set as your cdp-auth)   
-    - **User field**: Depending on the type of authentication this field will look differently (refer to types of authentication)
-   
+    - **User field**: Depending on the type of authentication this field will look differently (refer to types of authentication below)
+8. Check if your cefclient folder contains `cdp-auth-passthrough`and `cdp-auth` beside `cefclient`.
 9. Enjoy
     
 ### Types of authentication
@@ -105,6 +121,7 @@ You can do npm start and pass arguments with it, you should because it doesn't r
 Also you might need to recreate the `sea` folder and `dist` folder inside of it for the build to be successful.
 
 `cdp-auth-passthrough.au3` is a small passthrough that hide the SEA console window on launch, very useful when not debugging to avoid pesky windows popping up.
+`cefclient-embedded-passthrough.au3` is a bigger version of `cdp-auth-passthrough.au3` that generates a random debug port, embeds cefclient on a gui and serves as a passthrough for cdp-auth. (Current recommended way of automation)
 
 ### Auxiliary npm scripts
 ```
