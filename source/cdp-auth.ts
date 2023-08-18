@@ -24,12 +24,11 @@ export async function runFullCdpAuth(): Promise<void> {
 async function initCheck(): Promise<void> {
     const argumentsNumber: number = process.argv.length;
     if (argumentsNumber !== 6) {
-        console.log(`Incorrect number of arguments, you should be executing chrome-auth with "chrome-auth PORT URL/HOSTNAME TYPEOFLOGIN,LOGIN,ETC PASSWORD`);
+        console.log(`Incorrect number of arguments, you should be executing cdp-auth with "cdp-auth PORT URL/HOSTNAME TYPEOFLOGIN,LOGIN,ETC PASSWORD`);
         const exitCode: number = 1;
         process.exit(exitCode);
     }
 }
-
 
 /**
  * Run CDP auth
