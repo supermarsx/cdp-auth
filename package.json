@@ -1,6 +1,6 @@
 {
   "name": "cdp-auth",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG",
   "main": "executable.js",
   "scripts": {

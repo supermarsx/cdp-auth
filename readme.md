@@ -2,6 +2,12 @@
 
 A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG. Allows you to auto fill forms and login to some types of login forms automagically and using Chrome inside in mRemoteNG.
 
+
+## Changelog
+
+0.0.2: 
+- Added Field name typed automation option
+
 ## Known bugs/limitations
 - Doesn't handle element ids or names with commas
 - Doesn't handle iframe ids with commas
@@ -24,10 +30,11 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 - Joomla (using field_id like `field_id,ADMINUSER,mod-login-username,mod-login-password`)
 - Portainer (using field_id_typing like `field_id_typing,ADMINUSER,username,password`)
 - Nginx Manager (using field_name like `field_name,ADMINUSER,identity,secret`)
+- SQLPad (using field_name_typing like `field_name_typing,ADMINUSER,email,password`)
 
 ## Known not working logins
 
-- SQLPad, (using field_name like `field_name,ADMINUSER,email,password`), fills fields but gives invalid user/password
+- ...
 
 Note: Please report any working/non-working login with its full method to be integrated in the list. Do it by opening an issue or something.
 
@@ -100,6 +107,12 @@ Form Field Name: `field_name`: Form authentication using username and password i
 Form Field ID (typed): `field_id_typing`: Form authentication using username and password input IDs but values are "typed" in (Alternative when `field_id` doesn't work)
 - format: `field_id_typing,USERNAME,USERNAMEFIELDID,PASSWORDFIELDID`
 - example: `field_id_typing,administrator,usernameField,passwordField`
+
+--
+
+Form Field Name (typed): `field_name_typing`: Form authentication using username and password input names but values are "typed" in (Alternative when `field_name` doesn't work)
+- format: `field_name_typing,USERNAME,USERNAMEFIELDNAME,PASSWORDFIELDNAME`
+- example: `field_name_typing,administrator,usernameField,passwordField`
 
 --
 

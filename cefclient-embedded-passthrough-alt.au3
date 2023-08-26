@@ -1,9 +1,59 @@
 #NoTrayIcon ; Hide tray icon
+#RequireAdmin
 
 #include <GUIConstants.au3>
 #include <WindowsConstants.au3>
 #include <WinApi.au3>
 #include <WinAPIConstants.au3>
+#include <File.au3>
+#include <Crypt.au3>
+
+Local $iCmdLineTotalArgs = $CmdLine[0] ; Total args passed
+Local $dDecryptedData
+
+If $iCmdLineTotalArgs = 3 Then
+	_Crypt_Startup()
+	Local $sTempKeyFile = _TempFile()
+	Local $iAlgorithm = $CALG_AES_256
+	Local $iHashAlg = $CALG_SHA_512
+	Local $sHostname = $CmdLine[1]
+	Local $sUserField = $CmdLine[2]
+	Local $sPassword = $CmdLine[3]
+	Local $sRandomInteger = String(Random(10000, 90000, 1))
+	Local $g_hKey = _Crypt_HashData(StringFormat("%s%s%s", $sTempKeyFile, $sHostname, $sRandomInteger), $iHashAlg)
+	Local $dCryptedData = StringToBinary(_Crypt_EncryptData(StringToBinary($sPassword), $g_hKey, $iAlgorithm))
+	If @error Then
+		ConsoleWrite("Failed to encrypt, exiting." & @CRLF)
+		MsgBox(0, "Error", "Failed to encrypt, exiting.")
+		Exit
+	EndIf
+	_Crypt_DestroyKey($g_hKey)
+	_Crypt_Shutdown()
+	FileWrite($sTempKeyFile, $dCryptedData)
+	Local $sRunningArgs = StringFormat("%s\\%s %s %s %s %s", @ScriptDir, @ScriptName, $sHostname, $sUserField, $sTempKeyFile, $g_hKey)
+	Run($sRunningArgs, @ScriptDir)
+	Exit
+ElseIf $iCmdLineTotalArgs = 4 Then
+	_Crypt_Startup()
+	Local $sHostname = $CmdLine[1]
+	Local $sUserField = $CmdLine[2]
+	Local $sTempKeyFile = $CmdLine[3]
+	Local $iAlgorithm = $CALG_AES_256
+	Local $g_hKey = $CmdLine[4]
+	Local $dKeyFileContents = BinaryToString(FileRead($sTempKeyFile))
+	FileDelete($sTempKeyFile)
+	$dDecryptedData = BinaryToString(_Crypt_DecryptData($dKeyFileContents, $g_hKey, $iAlgorithm))
+	_Crypt_DestroyKey($g_hKey)
+	_Crypt_Shutdown()
+Else
+	ConsoleWrite("Wrong number of arguments, exiting." & @CRLF)
+	MsgBox(0, "Error", "Wrong number of arguments, exiting.")
+	Exit
+EndIf
+
+
+
+MsgBox(0,0,"")
 
 $DBG_PORT_LOWBOUND = 10200
 $DBG_PORT_HIGHBOUND = 13500
@@ -31,8 +81,8 @@ While $bPortOk = False
 		ConsoleWrite(StringFormat("Testing new random port %s, previous port tested occupied" & @CRLF, String($iDebugPort)))
 	EndIf
 	If (TimerDiff($iTimerPortCheck) / 1000) > $DBG_PORTCHECK_TIMEOUT Then
-		ConsoleWrite("Port check failure by timeout, exiting")
-		MsgBox(0, "Error", "Port check failure by timeout, exiting")
+		ConsoleWrite("Port check failure by timeout, exiting.")
+		MsgBox(0, "Error", "Port check failure by timeout, exiting.")
 		Exit
 	EndIf
 WEnd
@@ -84,20 +134,18 @@ If $hWnd <> 0 Then
     WinMove($hWnd, "", 0, 0, WinGetPos($hGUI)[2]-6, WinGetPos($hGUI)[3]-30)
 Else
 	ProcessClose($oCefPid)
-	ConsoleWrite("Failed to embed window, exiting" & @CRLF)
-	MsgBox(0,"Error", "Failed to embed window, exiting")
+	ConsoleWrite("Failed to embed window, exiting." & @CRLF)
+	MsgBox(0,"Error", "Failed to embed window, exiting.")
 	Exit
 EndIf
 GUISetState()
 
 ConsoleWrite("Launching cdp-auth" & @CRLF)
 Local $sCdpAuthBinary = "\cdp-auth.exe" ; CDP binary
-Local $iCdpTotalArgs = $CmdLine[0] ; Get total amount of args
-Local $sCdpArgs = "" ; Create arg store
-$sCdpArgs &= $sDebugPort & " " ; Add remote debug port
-For $i = 1 To $iCdpTotalArgs ; Loop through args
-    $sCdpArgs &= $CmdLine[$i] & " " ; Concatenate args to store
-Next
+Local $sHostname = $CmdLine[1]
+Local $sUserField = $CmdLine[2]
+Local $sPassword = $dDecryptedData
+Local $sCdpArgs = StringFormat("%s %s %s %s", $sDebugPort, $sHostname, $sUserField, $sPassword) ; Create arguments store to run cdp-auth
 Local $sCdpExecutablePath = StringFormat("%s%s", @ScriptDir,  $sCdpAuthBinary)
 Local $oCdpPid = ShellExecute($sCdpExecutablePath, $sCdpArgs, @ScriptDir, "", @SW_HIDE) ; Execute binary hidden
 
@@ -127,4 +175,5 @@ Func _GetDebugPort()
 	Local $iDebugPort = Random($DBG_PORT_LOWBOUND, $DBG_PORT_HIGHBOUND, 1)
 	Return $iDebugPort
 EndFunc
+
 

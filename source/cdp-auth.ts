@@ -1,4 +1,4 @@
-import { basicAuth, fieldId, fieldIdIframe, fieldIdTyping, fieldName } from './auth-automation.js';
+import { basicAuth, fieldId, fieldIdIframe, fieldIdTyping, fieldName, fieldNameTyping } from './auth-automation.js';
 import { connectToRemoteDebuggingInstance } from './connection.js';
 
 /**
@@ -72,6 +72,9 @@ export async function runCdpAuth() {
                     break;
                 case 'field_id_typing':
                     await fieldIdTyping({ Page, Runtime, DOM, Input, args, username, password });
+                    break;
+                case 'field_name_typing':
+                    await fieldNameTyping({ Page, Runtime, DOM, Input, args, username, password });
                     break;
                 case 'field_id+iframe':
                     await fieldIdIframe({ Page, Runtime, Input, args, username, password });

@@ -1,4 +1,4 @@
-import { setValueOfId, setValueOfName, setValueOfIdbyTyping, setValueOfIdInIframe } from './values.js';
+import { setValueOfId, setValueOfName, setValueOfIdbyTyping, setValueOfIdInIframe, setValueOfNamebyTyping } from './values.js';
 
 /**
  * Execute basic authentication script
@@ -145,6 +145,58 @@ export async function fieldIdTyping({ Page, Runtime, DOM, Input, args, username,
 
     const passwordElementId: string = args.formconfig.split(',')[3];
     await setValueOfIdbyTyping({ executionContextId, DOM, Runtime, Input, id: passwordElementId, value: password });
+
+    await Runtime.evaluate({
+        expression: `$("form").className = 'simple-box-form form-horizontal ng-valid ng-dirty ng-valid-parse'; $("#username").className = 'form-control ng-valid ng-touched ng-not-empty ng-dirty ng-valid-parse'; $("#password").addClass('ng-valid ng-touched ng-not-empty');`,
+        contextId: executionContextId
+    });
+
+    await Input.dispatchKeyEvent({
+        type: 'char',
+        text: '\r', // Use '\r' for Enter key
+        windowsVirtualKeyCode: 13,
+        nativeVirtualKeyCode: 13
+    });
+}
+
+/**
+ * Execute authentication script based on typing values on field names 
+ * 
+ * @param Page
+ * @param Runtime
+ * @param DOM
+ * @param Input
+ * @param args All arguments
+ * @param username Username
+ * @param password Password
+ * @since 0.0.2
+ */
+export async function fieldNameTyping({ Page, Runtime, DOM, Input, args, username, password }): Promise<void> {
+    const { frameId } = await Page.navigate({ url: `${args.url}` });
+    await Page.loadEventFired();
+
+    const { executionContextId } = await Page.createIsolatedWorld({ frameId });
+
+    const usernameElementName: string = args.formconfig.split(',')[2];
+
+    const timeout = 10000;
+    const checkInterval = 150;
+    const startTime = Date.now();
+    let element = null;
+
+    while (Date.now() - startTime < timeout && !element) {
+        element = await Runtime.evaluate({
+            expression: `document.getElementsByName("${usernameElementName}")[0];`,
+            contextId: executionContextId
+        });
+        await new Promise(function (resolve) { setTimeout(resolve, checkInterval) });
+        if (element) break;
+    }
+
+    await setValueOfNamebyTyping({ executionContextId, DOM, Runtime, Input, name: usernameElementName, value: username });
+
+    const passwordElementName: string = args.formconfig.split(',')[3];
+    await setValueOfNamebyTyping({ executionContextId, DOM, Runtime, Input, name: passwordElementName, value: password });
 
     await Runtime.evaluate({
         expression: `$("form").className = 'simple-box-form form-horizontal ng-valid ng-dirty ng-valid-parse'; $("#username").className = 'form-control ng-valid ng-touched ng-not-empty ng-dirty ng-valid-parse'; $("#password").addClass('ng-valid ng-touched ng-not-empty');`,
