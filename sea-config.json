@@ -2,5 +2,7 @@
   "main": "./sea/executable.js",
   "output": "./sea/sea-prep.blob",
   "disableExperimentalSEAWarning": true,
-  "type": "module"
+  "type": "module",
+  "useSnapshot": false,
+  "useCodeCache": true
 }
