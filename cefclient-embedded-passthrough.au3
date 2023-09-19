@@ -29,7 +29,7 @@ EndFunc
 
 ;~ Check if command line arguments are enough
 Func _CheckCmdArguments()
-	Local $iArgsCurrent = $CmdLine[0]
+	Local $iArgsCurrent = Int($CmdLine[0])
 	Local $iArgsNeeded = 3
 	Local $sMessageArgsNeeded = StringFormat("%s needs %s arguments to run (hostname, userfield and password), %s were provided.", @ScriptName, $iArgsNeeded, $iArgsCurrent)
 	If $iArgsCurrent <> $iArgsNeeded Then _DebugQuit($sMessageArgsNeeded)
@@ -45,7 +45,7 @@ EndFunc
 ;~ Check if a given executable exists
 Func _CheckExecutablesExists($aExecutables)
 	If IsArray($aExecutables) = 0 Then
-		Local $sMessageExecutablesArrayFailed = "Executables cehck failed due to input not being array. Quitting"
+		Local $sMessageExecutablesArrayFailed = "Executables check failed due to input not being an array."
 		_DebugQuit($sMessageExecutablesArrayFailed)
 	EndIf
 
@@ -53,7 +53,7 @@ Func _CheckExecutablesExists($aExecutables)
 		Local $sPath = StringFormat("%s%s", @ScriptDir, $sExecutable)
 		Local $bFileExists = FileExists($sPath)
 		If $bFileExists = 0 Then
-			Local $sMessageExecutableNotFound = StringFormat("Executable doesn't exist: %s, Quitting", $sExecutable)
+			Local $sMessageExecutableNotFound = StringFormat("Executable doesn't exist: %s", $sExecutable)
 			_DebugQuit($sMessageExecutableNotFound)
 		EndIf
 	Next
@@ -69,7 +69,8 @@ Func _PortAvailabilityCheck()
 	Local $sMessageStartup = "Starting up..."
 	_Debug($sMessageStartup)
 	TCPStartup()
-	Opt("TCPTimeout", $DBG_TCP_TIMEOUT) ; Set timeout to low value
+	Local $sTcpTimeoutOption = "TCPTimeout"
+	Opt($sTcpTimeoutOption, $DBG_TCP_TIMEOUT) ; Set timeout to low value
 
 	Local $sIPAddress = "127.0.0.1" ; Localhost/loopback IP
 	Global $iDebugPort = _GetDebugPort() ; Get a random remote debug port
@@ -78,7 +79,7 @@ Func _PortAvailabilityCheck()
 	Local $iSocket
 	Local $bTimedOut = False
 
-	$sMessagePortFree = StringFormat("Checking if port %s is free", String($iDebugPort))
+	$sMessagePortFree = StringFormat("Checking if port %s is free.", String($iDebugPort))
 	_Debug($sMessagePortFree)
 
 	;~ Debug port check if not in use
@@ -90,12 +91,12 @@ Func _PortAvailabilityCheck()
 			_Debug($sMessagePortUnvailable)
 		Else
 			$iDebugPort = _GetDebugPort()
-			Local $sMessagePortNew = StringFormat("Testing new random port %s, previous port tested occupied", String($iDebugPort))
+			Local $sMessagePortNew = StringFormat("Testing new random port %s, previous port tested occupied.", String($iDebugPort))
 			_Debug($sMessagePortNew)
 		EndIf
 		$bTimedOut = (TimerDiff($iTimerPortCheck) / 1000) > $DBG_PORTCHECK_TIMEOUT
 		If $bTimedOut Then
-			Local $sMessagePortFailed = "Port check failure by timeout, exiting"
+			Local $sMessagePortFailed = "Port check failure by timeout."
 			_DebugQuit($sMessagePortFailed)
 		EndIf
 	WEnd
@@ -105,7 +106,7 @@ EndFunc
 
 ;~ Launch CEF Client on the background
 Func _LaunchCEFClient()
-	Local $sMessageCefClientLaunch = "Launching cefclient"
+	Local $sMessageCefClientLaunch = "Launching cefclient."
 	_Debug($sMessageCefClientLaunch)
 	Local $sCefParamAllowRemote = "--remote-allow-origins=*" ; Allow debug from any origin
 	Global $sDebugPort = String($iDebugPort) ; Remote debug port to string
@@ -124,7 +125,7 @@ EndFunc
 
 ;~ Launch the main GUI to embed CEF client into
 Func _LaunchMainGUI()
-	Local $sMessageLaunchGui = "Launching GUI"
+	Local $sMessageLaunchGui = "Launching GUI."
 	_Debug($sMessageLaunchGui)
 	Local $sGuiBackgroundColor = 0x000000
 	Local $iGuiInitialWidth = 800
@@ -141,7 +142,7 @@ Func _LaunchMainGUI()
 	Local $iHandleTimeout = 10000
 	Local $iTimerHandle = TimerInit()
 	Local $WinList
-	Local $sMessageCefClientHandle = "Getting cefclient handle"
+	Local $sMessageCefClientHandle = "Getting cefclient handle."
 	_Debug($sMessageCefClientHandle)
 	While $hWnd = 0 ; Get window handle for cefclient
 		$WinList = WinList()
@@ -156,13 +157,14 @@ Func _LaunchMainGUI()
 		Next
 		$bTimedOut = (TimerDiff($iTimerHandle) / 1000) > $iHandleTimeout
 		If $bTimedOut Then
-			Local $sMessageFailedGettingHandle = "Failed getting CEF client handle by timeout, exiting"
+			Local $sMessageFailedGettingHandle = "Failed getting CEF client handle by timeout."
+			ProcessClose($oCefPid)
 			_DebugQuit($sMessageFailedGettingHandle)
 		EndIf
 		Sleep($iHandleInterval)
 	WEnd
 	If $hWnd <> 0 Then
-		Local $sMessageEmbeddingWindow = "Embedding cefclient into GUI"
+		Local $sMessageEmbeddingWindow = "Embedding cefclient into GUI."
 		_Debug($sMessageEmbeddingWindow)
 		$nExStyle = DllCall("user32.dll", "int", "GetWindowLong", "hwnd", $hWnd, "int", -20)
 		$nExStyle = $nExStyle[0]
@@ -175,7 +177,7 @@ Func _LaunchMainGUI()
 		_ResizeEmbeddedWindow()
 	Else
 		ProcessClose($oCefPid)
-		Local $sMessageEmbedFailed = "Failed to embed window, exiting"
+		Local $sMessageEmbedFailed = "Failed to embed window."
 		_DebugQuit($sMessageEmbedFailed)
 	EndIf
 	GUISetState()
@@ -183,13 +185,14 @@ EndFunc
 
 ;~ Launch CDP auth automation script
 Func _LaunchCDPAuth()
-	Local $sMessageLaunchCdp = "Launching cdp-auth"
+	Local $sMessageLaunchCdp = "Launching cdp-auth."
 	_Debug($sMessageLaunchCdp)
+	Local $sParamSpacing = " "
 	Local $iCdpTotalArgs = $CmdLine[0] ; Get total amount of args
 	Local $sCdpArgs = "" ; Create arg store
-	$sCdpArgs &= $sDebugPort & " " ; Add remote debug port
+	$sCdpArgs &= $sDebugPort & $sParamSpacing ; Add remote debug port
 	For $i = 1 To $iCdpTotalArgs ; Loop through args
-		$sCdpArgs &= $CmdLine[$i] & " " ; Concatenate args to store
+		$sCdpArgs &= $CmdLine[$i] & $sParamSpacing ; Concatenate args to store
 	Next
 	Local $sCdpExecutablePath = StringFormat("%s%s", @ScriptDir,  $sCdpAuthBinary)
 	Local $oCdpPid = ShellExecute($sCdpExecutablePath, $sCdpArgs, @ScriptDir, "", @SW_HIDE) ; Execute binary hidden
@@ -248,12 +251,16 @@ Func _ResizeEmbeddedWindow()
 	Local $iWindowHeightPadding = 30
 	Local $iWindowWidth = WinGetPos($hGUI)[2] - $iWindowWidthPadding
 	Local $iWindowHeight = WinGetPos($hGUI)[3] - $iWindowHeightPadding
-	WinMove($hWnd, "", 0, 0, $iWindowWidth, $iWindowHeight)
+	Local $sEmptyText = ""
+	Local $iPositionX = 0
+	Local $iPositionY = 0
+	WinMove($hWnd, $sEmptyText, $iPositionX, $iPositionY, $iWindowWidth, $iWindowHeight)
 EndFunc
 
 ;~ Generate debug port
 Func _GetDebugPort()
-	Local $iDebugPort = Random($DBG_PORT_LOWBOUND, $DBG_PORT_HIGHBOUND, 1)
+	Local $iIntegerFlag = 1
+	Local $iDebugPort = Int(Random($DBG_PORT_LOWBOUND, $DBG_PORT_HIGHBOUND, $iIntegerFlag))
 	Return $iDebugPort
 EndFunc
 
