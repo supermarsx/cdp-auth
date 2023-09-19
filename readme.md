@@ -31,6 +31,8 @@ A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG.
 - Portainer (using field_id_typing like `field_id_typing,ADMINUSER,username,password`)
 - Nginx Manager (using field_name like `field_name,ADMINUSER,identity,secret`)
 - SQLPad (using field_name_typing like `field_name_typing,ADMINUSER,email,password`)
+- TP-Link managed switch (using field_id like `field_id,ADMINUSER,username,password`)
+- 
 
 ## Known not working logins
 
@@ -40,47 +42,23 @@ Note: Please report any working/non-working login with its full method to be int
 
 ## Quick start
 
-### New `cefclient-embedded-passthrough`
-1. Download the latest `cdp-auth` [release](https://github.com/supermarsx/cdp-auth/releases) (0.0.2)
+### `cefclient-embedded-passthrough`
+1. Download the latest `cdp-auth` [release](https://github.com/supermarsx/cdp-auth/releases) (0.0.3)
 2. Download cef client binary (if you don't have it yet) you can get this one from the [official source](https://github.com/chromiumembedded/cef), [spotifycdn mirror](https://github.com/chromiumembedded/cef) [my github mirror](https://github.com/supermarsx/mirror-cef_binary_155.3.13)
-3. Extract `cdp-auth`to cef client folder
+3. Extract `cdp-auth` binary to cef client folder
 4. Configure `cefclient-embedded-passthrough` as an external tool 
     `cefclient-embedded-passthrough` should be passed the following arguments: 
     `%HOSTNAME% %USERFIELD% %PASSWORD%`
-    pick "try to integrate" (Very important if you want it to be embedded on a tab inside mremoteng)    
+    pick "try to integrate" (Very important if you want it to be embedded)    
 5. Configure connections like
     - **Hostname/IP**: Full url with protocol and port like: https://examplemgmt.com:9000
     - **Password**: User password as normal   
     - **Protocol**: External Tool   
     - **External Tool**: (whatever you set as your cefclient-embedded-passthrough)  
     - **User field**: Depending on the type of authentication this field will look differently (refer to types of authentication below)   
-6. Check if your cefclient folder contains `cefclient-embedded-passthrough`and `cdp-auth` beside `cefclient`.
+6. Check if your cefclient folder contains `cefclient-embedded-passthrough`, `cdp-auth` and `messagebox` beside `cefclient`.
 7. Enjoy
-
-### Old `cdp-auth-passthrough`
-
-1. Download the latest `cdp-auth` [release](https://github.com/supermarsx/cdp-auth/releases) (0.0.1)
-2. Download cef client binary (if you don't have it yet) you can get this one from the [official source](https://github.com/chromiumembedded/cef), [spotifycdn mirror](https://github.com/chromiumembedded/cef) [my github mirror](https://github.com/supermarsx/mirror-cef_binary_155.3.13)
-3. Extract `cdp-auth`to a folder and cef client to another
-4. Configure cef client as an external tool 
-    cef client should be passed the following arguments: 
-    `--remote-allow-origins=* --ignore-certificate-errors --remote-debugging-port=%PORT% --url=data:text/html;base64,PHA+PHNwYW4gc3R5bGU9J2ZvbnQtZmFtaWx5OiAiTHVjaWRhIENvbnNvbGUiLCBNb25hY28sIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxOHB4Oyc+V2FpdGluZyBmb3IgQ0RQIGNvbm5lY3Rpb24uLi48L3NwYW4+PC9wPg==`
-    pick "try to integrate" (Very important if you want it to be embedded on a tab inside mremoteng)
-    the base64 message will show a nice "Waiting for CDP connection..." instead of going to google
-    `ignore-certificate-errors` will allow to bypass the certificate errors automagically and open a remote debugging port on the specified port parameter on the connection.
-5. Configure `cdp-auth` as an external tool and pass the following arguments: `%PORT% %HOSTNAME% %USERFIELD% %PASSWORD%`
-6. Optionally configure `cdp-auth-passthrough` so console window stays hidden on execute (Recommended)
-7. Configure connections like
-    - **Hostname/IP**: Full url with protocol and port like: https://examplemgmt.com:9000
-    - **Port**: Remote debug port (has to be unique to each connection)   
-    - **Password**: User password as normal   
-    - **Protocol**: External Tool   
-    - **External Tool**: (whatever you set as your cef client)   
-    - **External Tool Before**: (whatever you set as your cdp-auth)   
-    - **User field**: Depending on the type of authentication this field will look differently (refer to types of authentication below)
-8. Check if your cefclient folder contains `cdp-auth-passthrough`and `cdp-auth` beside `cefclient`.
-9. Enjoy
-    
+   
 ### Types of authentication
 Your "User Field" will look differently depending on the type of login form:
 
