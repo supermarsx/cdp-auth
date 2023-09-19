@@ -12,7 +12,7 @@ EndFunc
 
 ;~ Initial checks
 Func _InitialChecks()
-	Local $iCmdArgsCurrent = $CmdLine[0] ; Get total amount of args
+	Local $iCmdArgsCurrent = Int($CmdLine[0]) ; Get total amount of args
 	Local $iCmdArgsNeeded = 3
 	If $iCmdArgsCurrent <> $iCmdArgsNeeded Then
 		Local $sMessageArgsMissing = StringFormat("%s needs %s arguments to run (hostname, userfield and password), %s were provided.", @ScriptName, $iCmdArgsNeeded, $iCmdArgsCurrent)
@@ -33,20 +33,26 @@ EndFunc
 
 ;~ Parse boolean value from string
 Func _ParseBoolean($sInput)
-	$sNewInput = StringReplace( _
-			StringLower( _
-				String($sInput) _
-			), _
-		" ", "")
+	Local $sSanitizedInput = _SanitizeBooleanInput($sInput)
+	Local $vTrueValues = BitOR("true", "1", "yes", "on")
+	Local $vFalseValues = BitOR("false", "0", "no", "off")
 
-	Switch $sNewInput
-        Case "true", "1", "yes", "on"
+	Switch $sSanitizedInput
+        Case $vTrueValues
             Return True
-        Case "false", "0", "no", "off"
+        Case $vFalseValues
             Return False
         Case Else
             Return False
     EndSwitch
+EndFunc
+
+;~ Sanitize boolean parse input
+Func _SanitizeBooleanInput($sInput)
+	Local $sCharSpace = " "
+	Local $sEmptyChar = ""
+	Local $sSanitizedInput = StringReplace(StringLower(String($sInput)), $sCharSpace, $sEmptyChar)
+	Return $sSanitizedInput
 EndFunc
 
 ;~ Handle debug and script quitting
