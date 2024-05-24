@@ -1,6 +1,6 @@
 # cdp-auth
 
-A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG. Allows you to auto fill forms and login to some types of login forms automagically and using Chrome inside in mRemoteNG.
+A CEF Client (Chrome/Chromium) CDP authentication automation tool for mRemoteNG. Allows you to auto fill forms and login to some types of login forms automagically and using Chrome inside of mRemoteNG.
 
 
 ## Changelog
